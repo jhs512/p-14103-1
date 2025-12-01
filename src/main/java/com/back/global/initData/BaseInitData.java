@@ -74,11 +74,27 @@ public class BaseInitData {
         if (postChainService.count() > 0) return;
 
         Member user1Member = memberService.findByUsername("user1").get();
+        Post post1 = postService.findById(1).get();
+        Post post2 = postService.findById(2).get();
+        Post post3 = postService.findById(3).get();
+
         Member user2Member = memberService.findByUsername("user2").get();
+        Post post4 = postService.findById(4).get();
+        Post post5 = postService.findById(5).get();
+
         Member user3Member = memberService.findByUsername("user3").get();
+        Post post6 = postService.findById(6).get();
 
         PostChain postChain1 = postChainService.make(user1Member, "글 그룹1", true);
+        postChain1.addItem(post1);
+        postChain1.addItem(post2);
+        postChain1.addItem(post3);
+
         PostChain postChain2 = postChainService.make(user2Member, "글 그룹2", true);
+        postChain2.addItem(post4);
+        postChain2.addItem(post5);
+
         PostChain postChain3 = postChainService.make(user3Member, "글 그룹3", true);
+        postChain3.addItem(post6);
     }
 }

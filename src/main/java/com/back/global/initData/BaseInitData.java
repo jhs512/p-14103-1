@@ -6,6 +6,8 @@ import com.back.domain.post.post.entity.Post;
 import com.back.domain.post.post.service.PostService;
 import com.back.domain.post.postChain.entity.PostChain;
 import com.back.domain.post.postChain.service.PostChainService;
+import com.back.domain.product.product.entity.Product;
+import com.back.domain.product.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -20,17 +22,20 @@ public class BaseInitData {
     private final MemberService memberService;
     private final PostService postService;
     private final PostChainService postChainService;
+    private final ProductService productService;
 
     public BaseInitData(
             @Lazy BaseInitData self,
             MemberService memberService,
             PostService postService,
-            PostChainService postChainService
+            PostChainService postChainService,
+            ProductService productService
     ) {
         this.self = self;
         this.memberService = memberService;
         this.postService = postService;
         this.postChainService = postChainService;
+        this.productService = productService;
     }
 
     @Bean
@@ -39,6 +44,7 @@ public class BaseInitData {
             self.work1();
             self.work2();
             self.work3();
+            self.work4();
         };
     }
 
@@ -96,5 +102,19 @@ public class BaseInitData {
 
         PostChain postChain3 = postChainService.make(user3Member, "글 그룹3", true);
         postChain3.addItem(post6);
+    }
+
+
+    @Transactional
+    public void work4() {
+        if (productService.count() > 0) return;
+
+        PostChain postChain1 = postChainService.findById(1).get();
+        PostChain postChain2 = postChainService.findById(2).get();
+        PostChain postChain3 = postChainService.findById(3).get();
+
+        Product product1 = productService.make(postChain1.getAuthor(), postChain1.getModelTypeCode(), postChain1.getId(), postChain1.getSubject(), postChain1.getSubject(), 3_000, 3_000);
+        Product product2 = productService.make(postChain2.getAuthor(), postChain2.getModelTypeCode(), postChain2.getId(), postChain2.getSubject(), postChain2.getSubject(), 2_000, 2_000);
+        Product product3 = productService.make(postChain3.getAuthor(), postChain3.getModelTypeCode(), postChain3.getId(), postChain3.getSubject(), postChain3.getSubject(), 1_000, 1_000);
     }
 }

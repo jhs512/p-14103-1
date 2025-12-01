@@ -26,4 +26,8 @@ public class BaseEntity {
 
     @LastModifiedDate
     private LocalDateTime updateDate;
+
+    public String getModelTypeCode() {
+        return getClass().getSimpleName();
+    }
 }

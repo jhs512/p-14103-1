@@ -4,6 +4,8 @@ import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
 import com.back.domain.post.post.entity.Post;
 import com.back.domain.post.post.service.PostService;
+import com.back.domain.post.postChain.entity.PostChain;
+import com.back.domain.post.postChain.service.PostChainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -17,15 +19,18 @@ public class BaseInitData {
     private final BaseInitData self;
     private final MemberService memberService;
     private final PostService postService;
+    private final PostChainService postChainService;
 
     public BaseInitData(
             @Lazy BaseInitData self,
             MemberService memberService,
-            PostService postService
+            PostService postService,
+            PostChainService postChainService
     ) {
         this.self = self;
         this.memberService = memberService;
         this.postService = postService;
+        this.postChainService = postChainService;
     }
 
     @Bean
@@ -66,6 +71,14 @@ public class BaseInitData {
 
     @Transactional
     public void work3() {
-        log.debug("작업 3");
+        if (postChainService.count() > 0) return;
+
+        Member user1Member = memberService.findByUsername("user1").get();
+        Member user2Member = memberService.findByUsername("user2").get();
+        Member user3Member = memberService.findByUsername("user3").get();
+
+        PostChain postChain1 = postChainService.make(user1Member, "글 그룹1", true);
+        PostChain postChain2 = postChainService.make(user2Member, "글 그룹2", true);
+        PostChain postChain3 = postChainService.make(user3Member, "글 그룹3", true);
     }
 }

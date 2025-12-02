@@ -7,6 +7,8 @@ import com.back.domain.cash.wallet.entity.Wallet;
 import com.back.domain.cash.wallet.service.WalletService;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
+import com.back.domain.order.order.entity.Order;
+import com.back.domain.order.order.service.OrderService;
 import com.back.domain.post.post.entity.Post;
 import com.back.domain.post.post.service.PostService;
 import com.back.domain.post.postChain.entity.PostChain;
@@ -30,6 +32,7 @@ public class BaseInitData {
     private final ProductService productService;
     private final CartService cartService;
     private final WalletService walletService;
+    private final OrderService orderService;
 
     public BaseInitData(
             @Lazy BaseInitData self,
@@ -38,7 +41,8 @@ public class BaseInitData {
             PostChainService postChainService,
             ProductService productService,
             CartService cartService,
-            WalletService walletService
+            WalletService walletService,
+            OrderService orderService
     ) {
         this.self = self;
         this.memberService = memberService;
@@ -47,6 +51,7 @@ public class BaseInitData {
         this.productService = productService;
         this.cartService = cartService;
         this.walletService = walletService;
+        this.orderService = orderService;
     }
 
     @Bean
@@ -58,6 +63,7 @@ public class BaseInitData {
             self.work4();
             self.work5();
             self.work6();
+            self.work7();
         };
     }
 
@@ -126,9 +132,9 @@ public class BaseInitData {
         PostChain postChain2 = postChainService.findById(2).get();
         PostChain postChain3 = postChainService.findById(3).get();
 
-        Product product1 = productService.make(postChain1.getAuthor(), postChain1.getModelTypeCode(), postChain1.getId(), postChain1.getSubject(), postChain1.getSubject(), 3_000, 3_000);
-        Product product2 = productService.make(postChain2.getAuthor(), postChain2.getModelTypeCode(), postChain2.getId(), postChain2.getSubject(), postChain2.getSubject(), 2_000, 2_000);
-        Product product3 = productService.make(postChain3.getAuthor(), postChain3.getModelTypeCode(), postChain3.getId(), postChain3.getSubject(), postChain3.getSubject(), 1_000, 1_000);
+        Product product1 = productService.make(postChain1.getAuthor(), postChain1.getModelTypeCode(), postChain1.getId(), postChain1.getSubject(), postChain1.getSubject(), postChain1.getSubject(), 3_000, 3_000);
+        Product product2 = productService.make(postChain2.getAuthor(), postChain2.getModelTypeCode(), postChain2.getId(), postChain2.getSubject(), postChain2.getSubject(), postChain2.getSubject(), 2_000, 2_000);
+        Product product3 = productService.make(postChain3.getAuthor(), postChain3.getModelTypeCode(), postChain3.getId(), postChain3.getSubject(), postChain3.getSubject(), postChain3.getSubject(), 1_000, 1_000);
     }
 
 
@@ -158,5 +164,16 @@ public class BaseInitData {
         wallet.credit(150_000, CashLog.EventType.충전__무통장입금);
         wallet.credit(100_000, CashLog.EventType.충전__무통장입금);
         wallet.credit(50_000, CashLog.EventType.충전__무통장입금);
+    }
+
+    @Transactional
+    public void work7() {
+        if ( orderService.count() > 0 ) return;
+
+        Member user1Member = memberService.findByUsername("user1").get();
+
+        Cart cart = cartService.findByBuyer(user1Member).get();
+
+        Order order = orderService.make(cart);
     }
 }

@@ -17,8 +17,8 @@ public class ProductService {
         return productRepository.count();
     }
 
-    public Product make(Member author, String relTypeCode, int relId, String originName, String name, int price, int salePrice) {
-        Product product = new Product(author, relTypeCode, relId, originName, name, price, salePrice);
+    public Product make(Member author, String relTypeCode, int relId, String originName, String name, String displayName, int price, int salePrice) {
+        Product product = new Product(author, relTypeCode, relId, originName, name, displayName, price, salePrice);
 
         return productRepository.save(product);
     }

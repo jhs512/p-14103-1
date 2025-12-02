@@ -19,6 +19,7 @@ import static jakarta.persistence.CascadeType.REMOVE;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Cart extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private Member buyer;

@@ -6,6 +6,8 @@ import com.back.domain.product.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -19,5 +21,9 @@ public class ProductService {
         Product product = new Product(author, relTypeCode, relId, originName, name, price, salePrice);
 
         return productRepository.save(product);
+    }
+
+    public Optional<Product> findById(int id) {
+        return productRepository.findById(id);
     }
 }

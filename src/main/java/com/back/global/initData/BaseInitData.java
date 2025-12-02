@@ -2,6 +2,9 @@ package com.back.global.initData;
 
 import com.back.domain.cart.cart.entity.Cart;
 import com.back.domain.cart.cart.service.CartService;
+import com.back.domain.cash.cashLog.entity.CashLog;
+import com.back.domain.cash.wallet.entity.Wallet;
+import com.back.domain.cash.wallet.service.WalletService;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
 import com.back.domain.post.post.entity.Post;
@@ -26,6 +29,7 @@ public class BaseInitData {
     private final PostChainService postChainService;
     private final ProductService productService;
     private final CartService cartService;
+    private final WalletService walletService;
 
     public BaseInitData(
             @Lazy BaseInitData self,
@@ -33,7 +37,8 @@ public class BaseInitData {
             PostService postService,
             PostChainService postChainService,
             ProductService productService,
-            CartService cartService
+            CartService cartService,
+            WalletService walletService
     ) {
         this.self = self;
         this.memberService = memberService;
@@ -41,6 +46,7 @@ public class BaseInitData {
         this.postChainService = postChainService;
         this.productService = productService;
         this.cartService = cartService;
+        this.walletService = walletService;
     }
 
     @Bean
@@ -51,6 +57,7 @@ public class BaseInitData {
             self.work3();
             self.work4();
             self.work5();
+            self.work6();
         };
     }
 
@@ -131,12 +138,25 @@ public class BaseInitData {
 
         Cart cart = cartService.findByBuyer(user1Member).get();
 
-        if ( !cart.isEmpty() ) return;
+        if (!cart.isEmpty()) return;
 
         Product product1 = productService.findById(1).get();
         Product product2 = productService.findById(2).get();
 
         cart.addItem(product1);
         cart.addItem(product2);
+    }
+
+    @Transactional
+    public void work6() {
+        Member user1Member = memberService.findByUsername("user1").get();
+
+        Wallet wallet = walletService.findByHolder(user1Member).get();
+
+        if (wallet.hasBalance()) return;
+
+        wallet.credit(150_000, CashLog.EventType.충전__무통장입금);
+        wallet.credit(100_000, CashLog.EventType.충전__무통장입금);
+        wallet.credit(50_000, CashLog.EventType.충전__무통장입금);
     }
 }

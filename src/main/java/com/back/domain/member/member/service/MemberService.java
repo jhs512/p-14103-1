@@ -1,7 +1,7 @@
 package com.back.domain.member.member.service;
 
-import com.back.domain.cart.cart.entity.Cart;
 import com.back.domain.cart.cart.service.CartService;
+import com.back.domain.cash.wallet.service.WalletService;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.repository.MemberRepository;
 import com.back.global.exceptions.BusinessException;
@@ -15,6 +15,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final CartService cartService;
+    private final WalletService walletService;
 
     public long count() {
         return memberRepository.count();
@@ -29,6 +30,7 @@ public class MemberService {
         Member member = new Member(username, password, nickname);
 
         cartService.make(member);
+        walletService.make(member);
 
         return memberRepository.save(member);
     }

@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,10 @@ public class Order extends BaseEntity {
     private int price;
     private int salePrice;
 
+    private LocalDateTime payDate; // 결제날짜
+    private LocalDateTime cancelDate; // 취소날짜
+    private LocalDateTime refundDate; // 환불날짜
+
     @OneToMany(mappedBy = "order", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
@@ -38,6 +43,18 @@ public class Order extends BaseEntity {
         this.wallet = wallet;
         this.price = price;
         this.salePrice = salePrice;
+    }
+
+    public boolean isCanceled() {
+        return cancelDate != null;
+    }
+
+    public boolean isRefunded() {
+        return refundDate != null;
+    }
+
+    public boolean isPaid() {
+        return payDate != null;
     }
 
     public void addItemsFrom(List<CartItem> items) {

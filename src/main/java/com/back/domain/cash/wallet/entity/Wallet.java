@@ -37,16 +37,28 @@ public class Wallet extends BaseEntity {
     }
 
     public void credit(long amount, CashLog.EventType eventType) {
-        balance += amount;
-
-        addCashLog(amount, eventType);
+        credit(amount, eventType, holder);
     }
 
-    private CashLog addCashLog(long amount, CashLog.EventType eventType) {
+    public void debit(long amount, CashLog.EventType eventType) {
+        debit(amount, eventType, holder);
+    }
+
+    public void credit(long amount, CashLog.EventType eventType, BaseEntity rel) {
+        balance += amount;
+
+        addCashLog(amount, eventType, rel);
+    }
+
+    public void debit(long amount, CashLog.EventType eventType, BaseEntity rel) {
+        credit(amount * -1, eventType, rel);
+    }
+
+    private CashLog addCashLog(long amount, CashLog.EventType eventType, BaseEntity rel) {
         CashLog cashLog = new CashLog(
                 eventType,
-                holder.getModelTypeCode(),
-                holder.getId(),
+                rel.getModelTypeCode(),
+                rel.getId(),
                 holder,
                 this,
                 amount,

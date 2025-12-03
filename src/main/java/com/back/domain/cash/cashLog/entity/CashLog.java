@@ -16,9 +16,10 @@ import static jakarta.persistence.FetchType.LAZY;
 public class CashLog extends BaseEntity {
     public enum EventType {
         충전__무통장입금,
-        충전__토스페이먼츠,
+        충전__PG,
         출금__통장입금,
         사용__주문결제,
+        임시보관__주문결제,
     }
 
     @Enumerated(EnumType.STRING)

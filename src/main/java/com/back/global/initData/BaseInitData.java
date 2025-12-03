@@ -64,6 +64,7 @@ public class BaseInitData {
             self.work5();
             self.work6();
             self.work7();
+            self.work8();
         };
     }
 
@@ -168,12 +169,21 @@ public class BaseInitData {
 
     @Transactional
     public void work7() {
-        if ( orderService.count() > 0 ) return;
+        if (orderService.count() > 0) return;
 
         Member user1Member = memberService.findByUsername("user1").get();
 
         Cart cart = cartService.findByBuyer(user1Member).get();
 
         Order order = orderService.make(cart);
+    }
+
+    @Transactional
+    public void work8() {
+        Order order = orderService.findById(1).get();
+
+        if (order.isPaid()) return;
+
+        orderService.completePayment(order);
     }
 }

@@ -5,17 +5,22 @@ import com.back.domain.cash.wallet.service.WalletService;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.repository.MemberRepository;
 import com.back.global.exceptions.BusinessException;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
     private final CartService cartService;
     private final WalletService walletService;
+
+    public MemberService(MemberRepository memberRepository, @Lazy CartService cartService, @Lazy WalletService walletService) {
+        this.memberRepository = memberRepository;
+        this.cartService = cartService;
+        this.walletService = walletService;
+    }
 
     public long count() {
         return memberRepository.count();

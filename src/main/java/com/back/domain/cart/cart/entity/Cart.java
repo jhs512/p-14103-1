@@ -46,4 +46,9 @@ public class Cart extends BaseEntity {
     public boolean isEmpty() {
         return itemCount == 0;
     }
+
+    public void clearItems() {
+        items.clear();
+        itemCount = 0;
+    }
 }

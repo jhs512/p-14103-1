@@ -27,4 +27,8 @@ public class CartService {
     public Optional<Cart> findByBuyer(Member buyer) {
         return cartRepository.findByBuyer(buyer);
     }
+
+    public void delete(Cart cart) {
+        cartRepository.delete(cart);
+    }
 }

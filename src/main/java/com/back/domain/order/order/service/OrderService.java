@@ -1,6 +1,7 @@
 package com.back.domain.order.order.service;
 
 import com.back.domain.cart.cart.entity.Cart;
+import com.back.domain.cart.cart.service.CartService;
 import com.back.domain.cash.cashLog.entity.CashLog;
 import com.back.domain.cash.wallet.entity.Wallet;
 import com.back.domain.cash.wallet.service.WalletService;
@@ -29,6 +30,8 @@ public class OrderService {
         );
 
         order.addItemsFrom(cart.getItems());
+
+        cart.clearItems();
 
         return orderRepository.save(order);
     }

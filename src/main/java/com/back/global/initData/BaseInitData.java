@@ -65,6 +65,8 @@ public class BaseInitData {
             self.work6();
             self.work7();
             self.work8();
+            self.work9();
+            self.work10();
         };
     }
 
@@ -185,5 +187,29 @@ public class BaseInitData {
         if (order.isPaid()) return;
 
         orderService.completePayment(order);
+    }
+
+    @Transactional
+    public void work9() {
+        Member user1Member = memberService.findByUsername("user1").get();
+
+        Cart cart = cartService.findByBuyer(user1Member).get();
+
+        if (!cart.isEmpty()) return;
+
+        Product product3 = productService.findById(3).get();
+
+        cart.addItem(product3);
+    }
+
+    @Transactional
+    public void work10() {
+        if (orderService.count() > 1) return;
+
+        Member user1Member = memberService.findByUsername("user1").get();
+
+        Cart cart = cartService.findByBuyer(user1Member).get();
+
+        Order order = orderService.make(cart);
     }
 }

@@ -27,11 +27,16 @@ spring:
         highlight_sql: true
         use_sql_comments: true
     open-in-view: false
+  batch:
+    job:
+      enabled: false  # Job 자동 실행 비활성화
 logging:
   level:
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
+    org.springframework.boot.autoconfigure: DEBUG
+    org.springframework.batch: DEBUG
     com.back: DEBUG
 custom:
   toss:
